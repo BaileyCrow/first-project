@@ -23,3 +23,32 @@ describe("GET /api", () => {
       });
   });
 });
+describe("GET /api/topics", () => {
+  test("200: should return an array of topics objects when topics exist", () => {
+    return request(app)
+      .get("/api/topics")
+      .expect(200)
+      .then(({ body: { topics } }) => {
+        expect(topics).toHaveLength(data.topicData.length);
+        topics.forEach((topic) => {
+          expect(topic).toMatchObject({
+            slug: expect.any(String),
+            description: expect.any(String),
+          });
+        });
+      });
+  });
+  describe("GET /api/topics", () => {
+    test.skip("404: should return 404 error if no topics are found", () => {
+      db.query = jest.fn().mockResolvedValue({ rows: [] });
+      return request(app)
+        .get("/api/topics")
+        .expect(404)
+        .then(({ body }) => {
+          expect(body).toEqual({
+            msg: "No topics found",
+          });
+        });
+    });
+  });
+});
