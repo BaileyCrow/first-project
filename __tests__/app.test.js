@@ -39,7 +39,7 @@ describe("GET /api/topics", () => {
       });
   });
   describe("GET /api/topics", () => {
-    test.skip("404: should return 404 error if no topics are found", () => {
+    test("404: should return 404 error if no topics are found", () => {
       db.query = jest.fn().mockResolvedValue({ rows: [] });
       return request(app)
         .get("/api/topics")
