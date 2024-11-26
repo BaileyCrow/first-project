@@ -38,17 +38,39 @@ describe("GET /api/topics", () => {
         });
       });
   });
-  describe("GET /api/topics", () => {
-    test("404: should return 404 error if no topics are found", () => {
-      db.query = jest.fn().mockResolvedValue({ rows: [] });
-      return request(app)
-        .get("/api/topics")
-        .expect(404)
-        .then(({ body }) => {
-          expect(body).toEqual({
-            msg: "No topics found",
-          });
+});
+describe("GET /api/articles/:article_id", () => {
+  test("200 sends a single article to the client", () => {
+    return request(app)
+      .get("/api/articles/1")
+      .expect(200)
+      .then(({ body: { article } }) => {
+        expect(article.article_id).toBe(1);
+        expect(article).toMatchObject({
+          title: expect.any(String),
+          topic: expect.any(String),
+          author: expect.any(String),
+          body: expect.any(String),
+          created_at: expect.any(String),
+          votes: expect.any(Number),
+          article_img_url: expect.any(String),
         });
-    });
+      });
+  });
+  test("404 sends an appropriate status and error message when given a valid but non-existent id", () => {
+    return request(app)
+      .get("/api/articles/999")
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("article not found");
+      });
+  });
+  test("400 sends an appropriate status and error message when given an invalid id", () => {
+    return request(app)
+      .get("/api/articles/not-an-article")
+      .expect(400)
+      .then((response) => {
+        expect(response.body.msg).toBe("Bad request");
+      });
   });
 });

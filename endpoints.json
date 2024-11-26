@@ -25,5 +25,17 @@
         }
       ]
     }
+  },
+  "GET /api/articles/:article_id": {
+    "description": "Responds with a single article, identified by its article_id.",
+    "example_response": {
+      "article_id": 1,
+      "title": "Understanding APIs",
+      "author": "butter_bridge",
+      "created_at": "2020-11-07T12:00:00.000Z",
+      "votes": 100,
+      "topic": "coding",
+      "body": "APIs allow different software components to interact."
+    }
   }
 }
