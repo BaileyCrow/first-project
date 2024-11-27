@@ -90,8 +90,28 @@ describe("GET /api/articles", () => {
             created_at: expect.any(String),
             votes: expect.any(Number),
             article_img_url: expect.any(String),
+            comment_count: expect.any(Number),
           });
         });
       });
+  });
+  describe("?sort_by", () => {
+    test("200 accepts a sort_by query on created_at in descending order", () => {
+      return request(app)
+        .get("/api/articles?sort_by=created_at")
+        .expect(200)
+        .then(({ body: { articles } }) => {
+          expect(articles).toHaveLength(data.articleData.length);
+          expect(articles).toBeSortedBy("created_at", { descending: true });
+        });
+    });
+    test("400: should respond with an error message if sort_by query is invalid", () => {
+      return request(app)
+        .get("/api/articles?sort_by=invalid_field")
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe("Bad request");
+        });
+    });
   });
 });

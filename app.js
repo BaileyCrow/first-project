@@ -2,6 +2,7 @@ const express = require("express");
 const {
   getTopics,
   getArticleById,
+  getArticles,
 } = require("./controllers/topics-controller");
 const {
   psqlErrorHandler,
