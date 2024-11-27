@@ -19,3 +19,33 @@ exports.fetchArticleById = (article_id) => {
       return rows[0];
     });
 };
+
+exports.fetchArticles = (sort_by = "created_at") => {
+  const validSortBy = ["created_at"];
+  let sqlQuery = `SELECT 
+      articles.article_id,
+      articles.title,
+      articles.topic,
+      articles.author,
+      articles.created_at,
+      articles.votes,
+      articles.article_img_url,
+      CAST(COUNT(comments.comment_id) AS INT) AS comment_count 
+      FROM articles
+      LEFT JOIN comments ON articles.article_id = comments.article_id
+      GROUP BY articles.article_id`;
+
+  if (!validSortBy.includes(sort_by)) {
+    return Promise.reject({ status: 400, msg: "Bad request" });
+  }
+  if (sort_by) {
+    sqlQuery += ` ORDER BY ${sort_by} DESC`;
+  }
+
+  return db.query(sqlQuery).then(({ rows }) => {
+    if (rows.length === 0) {
+      return Promise.reject({ status: 404, msg: "No articles found" });
+    }
+    return rows;
+  });
+};

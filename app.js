@@ -2,6 +2,7 @@ const express = require("express");
 const {
   getTopics,
   getArticleById,
+  getArticles,
 } = require("./controllers/topics-controller");
 const {
   psqlErrorHandler,
@@ -20,6 +21,8 @@ app.get("/api", (req, res) => {
 app.get("/api/topics", getTopics);
 
 app.get("/api/articles/:article_id", getArticleById);
+
+app.get("/api/articles", getArticles);
 
 // app.all("*", (req, res) => {
 //   res.status(404).send({ msg: "route not found" });
