@@ -194,4 +194,17 @@ describe("POST /api/articles/:article_id/comments", () => {
         expect(body.msg).toBe("Bad request: missing required fields");
       });
   });
+  test("404: responds with 'user not found' if username does not exist", () => {
+    const newComment = {
+      username: "unknown_user",
+      body: "This user does not exist.",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("user not found");
+      });
+  });
 });
