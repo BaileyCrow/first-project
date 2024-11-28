@@ -160,3 +160,51 @@ describe("GET /api/articles/:article_id/comments", () => {
       });
   });
 });
+
+describe("POST /api/articles/:article_id/comments", () => {
+  test("201: Respond with a new created comment", () => {
+    const newComment = {
+      username: "butter_bridge",
+      body: "I very much like a cold shower in the morning",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(201)
+      .then(({ body: { comment } }) => {
+        expect(comment).toEqual(
+          expect.objectContaining({
+            comment_id: expect.any(Number),
+            article_id: 1,
+            author: "butter_bridge",
+            body: "I very much like a cold shower in the morning",
+            votes: 0,
+            created_at: expect.any(String),
+          })
+        );
+      });
+  });
+  test("400: responds with error if missing required fields", () => {
+    const newComment = { username: "butter_bridge" };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Bad request: missing required fields");
+      });
+  });
+  test("404: responds with 'user not found' if username does not exist", () => {
+    const newComment = {
+      username: "unknown_user",
+      body: "This user does not exist.",
+    };
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(404)
+      .then(({ body }) => {
+        expect(body.msg).toBe("user not found");
+      });
+  });
+});

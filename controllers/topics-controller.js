@@ -3,7 +3,8 @@ const {
   fetchTopics,
   fetchArticleById,
   fetchArticles,
-  fetchCommentsByArticleId,
+  fetchCommentByArticleId,
+  addCommentToArticle,
 } = require("../models/topics-model");
 
 exports.getTopics = (req, res, next) => {
@@ -32,15 +33,26 @@ exports.getArticles = (req, res, next) => {
     .catch(next);
 };
 
-exports.getCommentsByArticleId = (req, res, next) => {
+exports.getCommentByArticleId = (req, res, next) => {
   const { article_id } = req.params;
-  const promises = [fetchCommentsByArticleId(article_id)];
+  const promises = [fetchCommentByArticleId(article_id)];
   if (article_id) {
     promises.push(checkArticleExists(article_id));
   }
   Promise.all(promises)
     .then(([comments]) => {
       res.status(200).send({ comments });
+    })
+    .catch(next);
+};
+
+exports.postCommentByArticleId = (req, res, next) => {
+  const { article_id } = req.params;
+  const { username, body } = req.body;
+
+  addCommentToArticle(article_id, username, body)
+    .then((comment) => {
+      res.status(201).send({ comment });
     })
     .catch(next);
 };
