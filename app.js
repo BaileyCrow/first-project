@@ -16,6 +16,12 @@ const endpointsJson = require("./endpoints.json");
 
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res
+    .status(200)
+    .send("Welcome weary traveller! Visit /api for available endpoints.");
+});
+
 app.get("/api", (req, res) => {
   res.status(200).send({ endpoints: endpointsJson });
 });
