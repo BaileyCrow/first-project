@@ -5,6 +5,7 @@ const {
   getArticles,
   getCommentByArticleId,
   postCommentByArticleId,
+  patchArticleById,
 } = require("./controllers/topics-controller");
 const {
   psqlErrorHandler,
@@ -35,6 +36,8 @@ app.get("/api/articles", getArticles);
 app.get("/api/articles/:article_id/comments", getCommentByArticleId);
 
 app.post("/api/articles/:article_id/comments", postCommentByArticleId);
+
+app.patch("/api/articles/:article_id", patchArticleById);
 
 app.use(psqlErrorHandler);
 

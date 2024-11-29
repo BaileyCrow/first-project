@@ -4,6 +4,7 @@ const {
   fetchArticles,
   fetchCommentByArticleId,
   addCommentToArticle,
+  updateArticleVotes,
 } = require("../models/topics-model");
 
 exports.getTopics = (req, res, next) => {
@@ -50,6 +51,17 @@ exports.postCommentByArticleId = (req, res, next) => {
   addCommentToArticle(article_id, username, body)
     .then((comment) => {
       res.status(201).send({ comment });
+    })
+    .catch(next);
+};
+
+exports.patchArticleById = (req, res, next) => {
+  const { article_id } = req.params;
+  const { inc_votes } = req.body;
+
+  updateArticleVotes(article_id, inc_votes)
+    .then((updatedArticle) => {
+      res.status(200).send({ article: updatedArticle });
     })
     .catch(next);
 };
