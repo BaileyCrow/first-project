@@ -17,6 +17,12 @@ const port = process.env.PORT || 9090;
 
 app.use(express.json());
 
+app.get("/", (req, res) => {
+  res
+    .status(200)
+    .send("Welcome to the API! Visit /api for available endpoints.");
+});
+
 app.get("/api", (req, res) => {
   res.status(200).send({ endpoints: endpointsJson });
 });
