@@ -38,5 +38,47 @@
       "topic": "coding",
       "body": "APIs allow different software components to interact."
     }
+  },
+  "GET /api/articles/:article_id/comments": {
+    "description": "Fetches all comments for a specific article, ordered by most recent first.",
+    "queries": [],
+    "exampleResponse": {
+      "comments": [
+        {
+          "comment_id": 5,
+          "article_id": 1,
+          "author": "butter_bridge",
+          "body": "I can't believe you've done this",
+          "votes": 10,
+          "created_at": "2024-11-26T12:00:00.000Z"
+        },
+        {
+          "comment_id": 4,
+          "article_id": 1,
+          "author": "lurker",
+          "body": "I smell like beef",
+          "votes": 5,
+          "created_at": "2024-11-25T15:30:00.000Z"
+        }
+      ]
+    }
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "adds a new comment for a specific article",
+    "queries": [],
+    "exampleRequest": {
+      "username": "butter_bridge",
+      "body": "I very much like a cold shower in the morning"
+    },
+    "exampleResponse": {
+      "comment": {
+        "comment_id": 5,
+        "article_id": 1,
+        "author": "butter_bridge",
+        "body": "I very much like a cold shower in the morning",
+        "votes": 0,
+        "created_at": "2024-11-26T12:00:00.000Z"
+      }
+    }
   }
 }
