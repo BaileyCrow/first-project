@@ -1,10 +1,10 @@
-const { checkArticleExists } = require("../models/comments-models");
 const {
   fetchTopics,
   fetchArticleById,
   fetchArticles,
   fetchCommentByArticleId,
   addCommentToArticle,
+  updateArticleVotes,
 } = require("../models/topics-model");
 
 exports.getTopics = (req, res, next) => {
@@ -36,9 +36,7 @@ exports.getArticles = (req, res, next) => {
 exports.getCommentByArticleId = (req, res, next) => {
   const { article_id } = req.params;
   const promises = [fetchCommentByArticleId(article_id)];
-  if (article_id) {
-    promises.push(checkArticleExists(article_id));
-  }
+  promises.push(fetchArticleById(article_id));
   Promise.all(promises)
     .then(([comments]) => {
       res.status(200).send({ comments });
@@ -53,6 +51,17 @@ exports.postCommentByArticleId = (req, res, next) => {
   addCommentToArticle(article_id, username, body)
     .then((comment) => {
       res.status(201).send({ comment });
+    })
+    .catch(next);
+};
+
+exports.patchArticleById = (req, res, next) => {
+  const { article_id } = req.params;
+  const { inc_votes } = req.body;
+
+  updateArticleVotes(article_id, inc_votes)
+    .then((updatedArticle) => {
+      res.status(200).send({ article: updatedArticle });
     })
     .catch(next);
 };

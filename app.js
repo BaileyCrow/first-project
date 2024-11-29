@@ -5,6 +5,7 @@ const {
   getArticles,
   getCommentByArticleId,
   postCommentByArticleId,
+  patchArticleById,
 } = require("./controllers/topics-controller");
 const {
   psqlErrorHandler,
@@ -15,6 +16,12 @@ const app = express();
 const endpointsJson = require("./endpoints.json");
 
 app.use(express.json());
+
+app.get("/", (req, res) => {
+  res
+    .status(200)
+    .send("Welcome weary traveller! Visit /api for available endpoints.");
+});
 
 app.get("/api", (req, res) => {
   res.status(200).send({ endpoints: endpointsJson });
@@ -29,6 +36,8 @@ app.get("/api/articles", getArticles);
 app.get("/api/articles/:article_id/comments", getCommentByArticleId);
 
 app.post("/api/articles/:article_id/comments", postCommentByArticleId);
+
+app.patch("/api/articles/:article_id", patchArticleById);
 
 app.use(psqlErrorHandler);
 
