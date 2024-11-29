@@ -13,15 +13,8 @@ const {
 } = require("./errors");
 const app = express();
 const endpointsJson = require("./endpoints.json");
-const port = process.env.PORT || 9090;
 
 app.use(express.json());
-
-app.get("/", (req, res) => {
-  res
-    .status(200)
-    .send("Welcome to the API! Visit /api for available endpoints.");
-});
 
 app.get("/api", (req, res) => {
   res.status(200).send({ endpoints: endpointsJson });
@@ -43,7 +36,4 @@ app.use(customErrorHandler);
 
 app.use(serverErrorHandler);
 
-app.listen(port, () => {
-  console.log(`listening on port ${port}`);
-});
 module.exports = app;
