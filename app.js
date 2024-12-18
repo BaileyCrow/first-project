@@ -1,3 +1,4 @@
+const cors = require("cors");
 const express = require("express");
 const {
   getTopics,
@@ -14,6 +15,8 @@ const {
 } = require("./errors");
 const app = express();
 const endpointsJson = require("./endpoints.json");
+
+app.use(cors());
 
 app.use(express.json());
 
